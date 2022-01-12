@@ -2,46 +2,17 @@ import React from 'react';
 import Square from './Square/Square';
 
 class Board extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      squares: Array(9).fill(null),
-      isXturn: true,
-    };
-  }
-
-  handleClick(i) {
-    const newSquares = this.state.squares.slice();
-    if (caluculaterWinner(newSquares) != null || newSquares[i] != null) {
-      return
-    }
-    newSquares[i] = this.state.isXturn ? 'X' : "O";
-    this.setState({
-      squares: newSquares,
-      isXturn: !this.state.isXturn
-    })
-  }
-
   renderSquare(i) {
     return (
       <Square
-        value={this.state.squares[i]}
-        onClick={() => this.handleClick(i)}
+        value={this.props.squares[i]}
+        onClick={() => this.props.onClick(i)}
       />);
   }
 
   render() {
-    let status;
-    const winner = caluculaterWinner(this.state.squares);
-    if (winner != null) {
-      status = 'Winner player:' + winner;
-    } else {
-      status = 'Next player:' + (this.state.isXturn ? "X" : "O");
-    }
-
     return (
       <div>
-        <div className="status">{status}</div>
         <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -62,26 +33,6 @@ class Board extends React.Component {
   }
 }
 
-function caluculaterWinner(squares) {
-  const victoryLines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-  ]
-  for (let i = 0; i < victoryLines.length; i++) {
-    const [a, b, c] = victoryLines[i]
-    if (squares[a] != null &&
-      squares[a] == squares[b] &&
-      squares[a] == squares[c]) {
-      return squares[a];
-    }
-  }
-  return null;
-}
+
 
 export default Board;
